@@ -1,0 +1,12 @@
+# Card creation
+POST http://localhost:8081/client/card/create
+Content-Type: application/json
+
+{
+  "accountNumber": "85232125695565656823"
+}
+
+> {%
+ client.assert(200 === response.status, "Response status is not 200")
+ client.assert(response.body.cardNumber != null, "Card number is null")
+ %}

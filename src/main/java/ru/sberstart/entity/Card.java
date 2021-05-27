@@ -1,54 +1,31 @@
 package ru.sberstart.entity;
 
-import ru.sberstart.dategenerator.DateExpireAfterThreeYears;
-import ru.sberstart.dategenerator.DateExpiryGenerator;
-
+import java.util.Objects;
 import java.util.Random;
 
 public class Card {
-    private long id;
-    private String number;
-    //private LocalDate cardExpiry;
+    private long cardId;
+    private String cardNumber;
     private long accountId;
 
 
-    public Card(Account account) {
-        DateExpiryGenerator dateExpiryGenerator = new DateExpireAfterThreeYears();
-        number = String.valueOf(new Random().nextInt());
-        //cardExpiry = dateExpiryGenerator.generate();
-        accountId = account.getId();
-    }
-
-    public Card(long id, String number, long accountId) {
-        this.id = id;
-        this.number = number;
+    public Card(Long accountId, String cardNumber) {
         this.accountId = accountId;
     }
 
-    public String getNumber() {
-        return number;
+    public Card(long cardId, String cardNumber, long accountId) {
+        this.cardId = cardId;
+        this.cardNumber = cardNumber;
+        this.accountId = accountId;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public String getCardNumber() {
+        return cardNumber;
     }
 
-//    public LocalDate getCardExpiry() {
-//        return cardExpiry;
-//    }
-
-//    public void setCardExpiry(LocalDate cardExpiry) {
-//        this.cardExpiry = cardExpiry;
-//    }
-
-//    @Override
-//    public String toString() {
-//        return "Card{" +
-//                "number='" + number + '\'' +
-//                ", cardExpiry=" + cardExpiry +
-//                ", dispositionId=" + id_account +
-//                '}';
-//    }
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
 
     public long getAccountId() {
         return accountId;
@@ -57,9 +34,22 @@ public class Card {
     @Override
     public String toString() {
         return "Card{" +
-                "id=" + id +
-                ", number='" + number + '\'' +
+                "id=" + cardId +
+                ", number='" + cardNumber + '\'' +
                 ", accountId=" + accountId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        return cardId == card.cardId && accountId == card.accountId && Objects.equals(cardNumber, card.cardNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cardId, cardNumber, accountId);
     }
 }

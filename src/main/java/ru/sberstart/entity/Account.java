@@ -1,43 +1,36 @@
 package ru.sberstart.entity;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 public class Account {
-    private long id;
+    private long accountId;
     private String number;
-    private double amount;
-    private long idClient;
+    private BigDecimal amount;
+    private long clientId;
 
-    public Account(long id, String number, double amount, long idClient) {
-        this.id = id;
-        this.number = number;
-        this.amount = amount;
-        this.idClient = idClient;
+    public Account() {
     }
 
-    public long getId() {
-        return id;
+    public Account(long accountId, String number, BigDecimal amount, long clientId) {
+        this.accountId = accountId;
+        this.number = number;
+        this.amount = amount;
+        this.clientId = clientId;
+    }
+
+    public long getAccountId() {
+        return accountId;
     }
 
     public String getNumber() {
         return number;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", number='" + number + '\'' +
-                ", amount=" + amount +
-                ", client=" + idClient +
-                '}';
+    public long getClientId() {
+        return clientId;
     }
 }

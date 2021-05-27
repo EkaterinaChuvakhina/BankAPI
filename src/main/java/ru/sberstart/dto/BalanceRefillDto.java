@@ -1,17 +1,32 @@
 package ru.sberstart.dto;
 
+import java.math.BigDecimal;
+
 public class BalanceRefillDto {
     private String accountNumber;
-    private double amount;
+    private BigDecimal amount;
 
     public BalanceRefillDto() {
+    }
+
+    public BalanceRefillDto(String accountNumber, BigDecimal amount) {
+        this.accountNumber = accountNumber;
+        this.amount = amount;
     }
 
     public String getAccountNumber() {
         return accountNumber;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 }

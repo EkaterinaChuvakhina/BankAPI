@@ -1,82 +1,100 @@
 package ru.sberstart.dao;
 
 import ru.sberstart.entity.Account;
+import ru.sberstart.exception.DaoException;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AccountDaoJdbcImpl implements AccountDao {
+    private static final String UPDATE_QUERY = "UPDATE accounts SET amount = amount + ?  WHERE accounts.account_number = ?";
+    private static final String SELECT_BY_NUMBER_QUERY = "SELECT * FROM accounts WHERE accounts.account_number = ?";
+    private static final String SELECT_BY_ACCOUNT_ID_QUERY = "SELECT * FROM accounts WHERE accounts.account_id = ?";
+    private static final String SELECT_FROM_CLIENTS_ACCOUNT_BY_ACCOUNT_ID_QUERY = "SELECT accounts.account_id FROM clients INNER JOIN accounts \n" +
+            "WHERE accounts.account_id = ?";
     private final DataSource dataSource;
 
     public AccountDaoJdbcImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-
+    @Override
     public Account findById(long accountId) {
-        Connection connection = getConnection();
-        try {
-            String query = "select * from accounts where accounts.id_account = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ACCOUNT_ID_QUERY);) {
             statement.setLong(1, accountId);
             statement.execute();
             ResultSet resultSet = statement.getResultSet();
             if (resultSet.next()) {
                 long id = resultSet.getLong(1);
                 String accountNumber = resultSet.getString(2);
-                double amount = resultSet.getDouble(3);
+                BigDecimal amount = resultSet.getBigDecimal(3);
                 long clientId = resultSet.getLong(4);
                 return new Account(id, accountNumber, amount, clientId);
+            } else {
+                throw new IllegalArgumentException("Account by id" + accountId + "not found");
             }
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException ex) {
+            throw new DaoException("Internal service error!");
         }
-        return null;
     }
 
     @Override
     public Long findAccountIdByClientId(long clientId) {
-        Connection connection = getConnection();
-        try {
-            String query = "select accounts.id_account from clients inner join accounts \n" +
-                    "where accounts.id_account = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_FROM_CLIENTS_ACCOUNT_BY_ACCOUNT_ID_QUERY);) {
             statement.setLong(1, clientId);
             statement.execute();
             ResultSet resultSet = statement.getResultSet();
-
             if (resultSet.next()) {
                 return resultSet.getLong(1);
+            } else {
+                throw new IllegalArgumentException("Account by client id " + clientId + " not found");
             }
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-        return null;
+        //exception
+        throw new DaoException("Internal service error!");
     }
 
     @Override
-    public double findAmountById(long accountId) {
-        return findById(accountId).getAmount();
-
+    public Account findByNumber(String number) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_BY_NUMBER_QUERY)) {
+            statement.setString(1, number);
+            statement.execute();
+            ResultSet resultSet = statement.getResultSet();
+            if (resultSet.next()) {
+                long id = resultSet.getLong(1);
+                String accountNumber = resultSet.getString(2);
+                BigDecimal amount = resultSet.getBigDecimal(3);
+                long clientId = resultSet.getLong(4);
+                return new Account(id, accountNumber, amount, clientId);
+            } else {
+                throw new IllegalArgumentException("Account by number " + number + " not found");
+            }
+        } catch (SQLException ex) {
+            throw new DaoException("Internal service error!");
+        }
     }
 
     @Override
-    public void updateAmount(String number, double amount) {
-        Connection connection = getConnection();
-        try {
-            String query = "UPDATE accounts SET amount = amount + ?  WHERE accounts.account_number = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setDouble(1, amount);
+    public Account updateAmount(String number, BigDecimal amount) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY)) {
+            statement.setBigDecimal(1, amount);
             statement.setString(2, number);
             statement.executeUpdate();
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            return findByNumber(number);
+        } catch (SQLException e) {
+            throw new DaoException("Internal service error!");
         }
     }
 
@@ -87,9 +105,7 @@ public class AccountDaoJdbcImpl implements AccountDao {
             connection = dataSource.getConnection();
             return connection;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoException("Internal service error!");
         }
-
-        return null;
     }
 }

@@ -16,21 +16,14 @@ public class BalanceRefillHandler extends AbstractHandler {
     }
 
     @Override
-    protected void doPost(HttpExchange exchange) {
-        BalanceRefillDto balanceRefillDto = null;
+    protected BalanceRefillDto doPost(HttpExchange exchange) {
         try {
-            balanceRefillDto = MAPPER.readValue(exchange.getRequestBody(), BalanceRefillDto.class);
-            clientService.refillBalance(balanceRefillDto);
-
+            BalanceRefillDto balanceRefillDto = MAPPER.readValue(exchange.getRequestBody(), BalanceRefillDto.class);
+            return clientService.refillBalance(balanceRefillDto);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
-
     }
 
-    @Override
-    protected void doGet(HttpExchange exchange) {
-
-    }
 }
 
