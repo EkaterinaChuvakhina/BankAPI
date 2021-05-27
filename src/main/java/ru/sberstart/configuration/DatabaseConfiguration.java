@@ -38,6 +38,9 @@ public class DatabaseConfiguration {
         RunScript.execute(getDatasource().getConnection(),
                 new FileReader(getClass().getClassLoader()
                         .getResource("db/bank_ddl.sql").getFile()));
+        RunScript.execute(getDatasource().getConnection(),
+                new FileReader(getClass().getClassLoader()
+                        .getResource("db/bank_insert.sql").getFile()));
     }
 }
 
