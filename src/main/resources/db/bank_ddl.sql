@@ -13,7 +13,6 @@ create table accounts
     amount         decimal(19, 6) not null,
     client_id      bigint         not null,
     constraint fk_client foreign key (client_id) references clients (client_id)
-
 );
 
 create table cards

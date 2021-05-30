@@ -5,14 +5,12 @@ import ru.sberstart.dao.AccountDao;
 import ru.sberstart.dto.AccountDto;
 import ru.sberstart.dto.BalanceRefillDto;
 import ru.sberstart.entity.Account;
-import ru.sberstart.exception.NegativeAmountException;
 import ru.sberstart.mapper.AccountMapper;
 
 import java.math.BigDecimal;
 
 public class AccountService {
     private final AccountMapper accountMapper = Mappers.getMapper(AccountMapper.class);
-    //delete
     private final AccountDao accountDao;
 
     public AccountService(AccountDao accountDao) {
@@ -28,15 +26,15 @@ public class AccountService {
         return accountMapper.toAccountDto(account);
     }
 
-    public BalanceRefillDto balanceRefill(BalanceRefillDto balanceRefillDto) {
+    public AccountDto balanceRefill(BalanceRefillDto balanceRefillDto) {
         BigDecimal amount = balanceRefillDto.getAmount();
         String accountNumber = balanceRefillDto.getAccountNumber();
         if (amount.compareTo(new BigDecimal(0)) < 0) {
-            throw new NegativeAmountException("Pass negative amount" + amount);
+            throw new IllegalArgumentException("Pass negative amount" + amount);
         }
 
         Account updatedAccount = accountDao.updateAmount(accountNumber, amount);
-        return accountMapper.toBalanceRefillDto(updatedAccount);
+        return accountMapper.toAccountDto(updatedAccount);
     }
 
     public AccountDto getByNumber(String accountNumber) {

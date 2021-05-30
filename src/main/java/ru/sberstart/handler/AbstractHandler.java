@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import ru.sberstart.exception.BusinessException;
-import ru.sberstart.exception.ClientNotFoundException;
 import ru.sberstart.exception.DaoException;
-import ru.sberstart.exception.NegativeAmountException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -28,14 +26,6 @@ public abstract class AbstractHandler implements HttpHandler {
         }
         return result;
     }
-
-//    public static void writeResponse(HttpExchange httpExchange, String response) throws IOException {
-//        httpExchange.sendResponseHeaders(200, response.length());
-//        OutputStream os = httpExchange.getResponseBody();
-//        os.write(response.getBytes());
-//        os.close();
-//    }
-
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String requestMethod = exchange.getRequestMethod();
@@ -50,21 +40,25 @@ public abstract class AbstractHandler implements HttpHandler {
             } else {
                 throw new IllegalArgumentException("Unknown request method " + requestMethod);
             }
-            response = MAPPER.writer().writeValueAsString(result);
             statusCode = 200;
-            exchange.sendResponseHeaders(statusCode, response.getBytes().length);
+            response = MAPPER.writer().writeValueAsString(result);
         } catch (IllegalArgumentException e) {
+            response = e.getMessage();
             statusCode = 400;
             exchange.sendResponseHeaders(statusCode, response.getBytes().length);
+            exchange.getResponseBody().write(response.getBytes(StandardCharsets.UTF_8));
         } catch (BusinessException e) {
             response = e.getMessage();
             statusCode = 500;
             exchange.sendResponseHeaders(statusCode, response.getBytes().length);
+            exchange.getResponseBody().write(response.getBytes(StandardCharsets.UTF_8));
         } catch (DaoException e) {
             response = e.getMessage();
             statusCode = 500;
             exchange.sendResponseHeaders(statusCode, response.getBytes().length);
+            exchange.getResponseBody().write(response.getBytes(StandardCharsets.UTF_8));
         }
+        exchange.sendResponseHeaders(statusCode, response.getBytes().length);
         exchange.getResponseBody().write(response.getBytes(StandardCharsets.UTF_8));
     }
 

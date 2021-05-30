@@ -21,6 +21,7 @@
         <junit-jupiter-engine.version>5.1.0</junit-jupiter-engine.version>
         <junit-platform-surefire-provider.version>1.0.3</junit-platform-surefire-provider.version>
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
+        <mockito-inline.version>3.8.0</mockito-inline.version>
     </properties>
     <dependencies>
         <dependency>
@@ -63,13 +64,19 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>2.21.0</version>
+            <version>3.4.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>2.23.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <version>${mockito-inline.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -107,25 +114,6 @@
                         <version>${junit-jupiter-engine.version}</version>
                     </dependency>
                 </dependencies>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>ru.sberstart.Main</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

@@ -1,7 +1,6 @@
 package ru.sberstart.entity;
 
 import java.util.Objects;
-import java.util.Random;
 
 public class Card {
     private long cardId;
@@ -11,6 +10,7 @@ public class Card {
 
     public Card(Long accountId, String cardNumber) {
         this.accountId = accountId;
+        this.cardNumber = cardNumber;
     }
 
     public Card(long cardId, String cardNumber, long accountId) {

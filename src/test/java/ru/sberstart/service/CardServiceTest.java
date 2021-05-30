@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.eq;
 @ExtendWith(MockitoExtension.class)
 class CardServiceTest {
     @Mock
-    private CardService.CardNumberGenerator cardNumberGenerator;
+    private CardNumberGenerator cardNumberGenerator;
     @Mock
     private AccountService accountService;
     @Mock

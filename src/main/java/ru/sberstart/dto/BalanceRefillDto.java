@@ -21,12 +21,4 @@ public class BalanceRefillDto {
     public BigDecimal getAmount() {
         return amount;
     }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
 }

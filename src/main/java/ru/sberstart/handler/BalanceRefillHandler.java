@@ -2,6 +2,7 @@ package ru.sberstart.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
+import ru.sberstart.dto.AccountDto;
 import ru.sberstart.dto.BalanceRefillDto;
 import ru.sberstart.service.ClientService;
 
@@ -16,7 +17,7 @@ public class BalanceRefillHandler extends AbstractHandler {
     }
 
     @Override
-    protected BalanceRefillDto doPost(HttpExchange exchange) {
+    protected AccountDto doPost(HttpExchange exchange) {
         try {
             BalanceRefillDto balanceRefillDto = MAPPER.readValue(exchange.getRequestBody(), BalanceRefillDto.class);
             return clientService.refillBalance(balanceRefillDto);

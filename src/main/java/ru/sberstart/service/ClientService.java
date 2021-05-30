@@ -22,7 +22,7 @@ public class ClientService {
 
 
     public List<CardDto> getAllCards(Long clientId) {
-        long accountId = accountService.getAccountIdByClientId(clientId);
+        Long accountId = accountService.getAccountIdByClientId(clientId);
         return cardService.findAllCards(accountId);
     }
 
@@ -30,7 +30,7 @@ public class ClientService {
         return accountService.getAmountById(accountId);
     }
 
-    public BalanceRefillDto refillBalance(BalanceRefillDto balanceRefillDto) {
+    public AccountDto refillBalance(BalanceRefillDto balanceRefillDto) {
         return accountService.balanceRefill(balanceRefillDto);
     }
 }

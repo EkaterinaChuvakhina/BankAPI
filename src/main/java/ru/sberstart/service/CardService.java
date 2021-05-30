@@ -9,10 +9,8 @@ import ru.sberstart.entity.Card;
 import ru.sberstart.mapper.CardMapper;
 
 import java.util.List;
-import java.util.Random;
 
 public class CardService {
-    private static final Random random = new Random();
     private final CardMapper cardMapper = Mappers.getMapper(CardMapper.class);
     private final AccountService accountService;
     private final CardDao cardDao;
@@ -34,18 +32,7 @@ public class CardService {
         return cardMapper.toCardDto(createdCard);
     }
 
-    public List<CardDto> findAllCards(long accountId) {
+    public List<CardDto> findAllCards(Long accountId) {
         return cardMapper.toListCardDto(cardDao.findAllCards(accountId));
-    }
-
-    public static class CardNumberGenerator {
-        public CardNumberGenerator() {
-        }
-
-        public String generate() {
-            return String.valueOf(Math.abs(random.nextInt()));
-        }
-
-        ;
     }
 }

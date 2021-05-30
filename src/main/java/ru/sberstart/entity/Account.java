@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class Account {
     private long accountId;
-    private String number;
+    private String accountNumber;
     private BigDecimal amount;
     private long clientId;
 
@@ -13,7 +13,7 @@ public class Account {
 
     public Account(long accountId, String number, BigDecimal amount, long clientId) {
         this.accountId = accountId;
-        this.number = number;
+        this.accountNumber = number;
         this.amount = amount;
         this.clientId = clientId;
     }
@@ -22,8 +22,8 @@ public class Account {
         return accountId;
     }
 
-    public String getNumber() {
-        return number;
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
     public BigDecimal getAmount() {
