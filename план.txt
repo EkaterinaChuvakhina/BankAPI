@@ -1,6 +1,0 @@
-1. response, exceptions
-2. test
-3. repository
-4. entity
-5. java doc
-6. index data base
